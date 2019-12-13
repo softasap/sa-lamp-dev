@@ -4,10 +4,6 @@
 
   - include_tasks: tasks_adminer.yml
 
-  - name: Tools | Template nginx config
-    template: src="tools_http.conf.j2" dest="/etc/nginx/sites-enabled/tools.conf"
-    become: yes
-
   - name: Tools | Template dashboard dependencies
     unarchive:
       src: files/dashboard.tar.gz
@@ -26,6 +22,11 @@
 
   - name: Tools | Template dashboard phppool
     template: src="pool.conf.j2" dest="/etc/php/{{ lamp_dev_tools_php_family }}/fpm/pool.d/dashboard.conf"
+    when: docker_test is not defined
+    become: yes
+
+  - name: Tools | Template nginx config
+    template: src="tools_http.conf.j2" dest="/etc/nginx/sites-enabled/tools.conf"
     when: docker_test is not defined
     become: yes
 
