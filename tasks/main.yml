@@ -26,16 +26,22 @@
 
   - name: Tools | Template dashboard phppool
     template: src="pool.conf.j2" dest="/etc/php/{{ lamp_dev_tools_php_family }}/fpm/pool.d/dashboard.conf"
+    when: docker_test is not defined
     become: yes
 
   - name: Tools | Promote dashboard pool user to the poweruser
-    shell: usermod -aG adm "{{ dashboard_php_pool_user }}"
+    user:
+      name: "{{ dashboard_php_pool_user }}"
+      groups: adm
+      append: yes
     become: yes
 
   - name: Restart php fpm
     service: name="php{{ lamp_dev_tools_php_family }}-fpm" state="restarted"
+    when: docker_test is not defined
     become: yes
 
   - name: Restart webserver
     service: name="nginx" state="restarted"
+    when: docker_test is not defined
     become: yes
