@@ -20,7 +20,7 @@ Simple
 Advanced
 
 ```YAML
-role:
+roles:
     -  {
 
          role: "sa_lamp_dev"
